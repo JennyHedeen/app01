@@ -1,8 +1,6 @@
-package com.hedeen.john.app01.dao;
+package com.hedeen.john.app01.dao.util;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ResourceBundle;
 
 public class DBConnection {
@@ -30,5 +28,15 @@ public class DBConnection {
             }
         }
         return connection;
+    }
+
+    public static void close(Connection connection, Statement st, ResultSet rs) {
+        try {
+            if(rs!=null) rs.close();
+            if(st!=null) st.close();
+            if(connection!=null) connection.close();
+        } catch (SQLException e) {
+//            logger.error(e.getMessage());
+        }
     }
 }

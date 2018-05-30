@@ -1,7 +1,5 @@
 package com.hedeen.john.app01.dao.util;
 
-import com.hedeen.john.app01.dao.DBConnection;
-
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.sql.*;
@@ -57,5 +55,29 @@ public class DBHelper {
             }
             System.out.println();
         }
+    }
+
+    public static String getResultSet(ResultSet rs) throws SQLException {
+        ResultSetMetaData metaData = rs.getMetaData();
+        StringBuilder sb = new StringBuilder();
+        int columnCount = metaData.getColumnCount();
+        for(int i = 1; i <= columnCount; i++) {
+            if(i > 1) {
+                sb.append(", ");
+            }
+            sb.append(metaData.getColumnLabel(i));
+        }
+        sb.append("\n");
+
+        while(rs.next()) {
+            for(int i = 1; i <= columnCount; i++) {
+                if(i > 1) {
+                    sb.append(", ");
+                }
+                sb.append(rs.getString(i));
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
     }
 }
