@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
 
 public class MainServlet extends HttpServlet {
 
@@ -23,17 +24,18 @@ public class MainServlet extends HttpServlet {
         Connection con = DBConnection.getConnection();
         Statement st = null;
         ResultSet rs = null;
-        String result = null;
+        String result = "";
+        PrintWriter pw = resp.getWriter();
         try {
             st = con.createStatement();
             rs = st.executeQuery("SELECT users.*, user_roles.role FROM users, user_roles WHERE users.u_id=user_roles.user_id");
             result = DBHelper.getResultSet(rs);
         } catch (SQLException e) {
             e.printStackTrace();
+            pw.write(Arrays.toString(e.getStackTrace()));
         } finally {
             DBConnection.close(con, st, rs);
         }
-        PrintWriter pw = resp.getWriter();
         pw.write(result);
     }
 }

@@ -1,7 +1,5 @@
 package com.hedeen.john.app01.dao.util;
 
-import java.io.IOException;
-import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ResourceBundle;
 import java.util.Scanner;
@@ -12,7 +10,7 @@ public class DBHelper {
         try {
             Statement st = DBConnection.getConnection().createStatement();
             ResourceBundle appRB = ResourceBundle.getBundle("application");
-            Scanner sc = new Scanner(Paths.get(appRB.getString("app.initdb")));
+            Scanner sc = new Scanner(DBHelper.class.getResourceAsStream(appRB.getString("app.initdb")));
             StringBuilder sb = new StringBuilder();
 
             while(true) {
@@ -30,7 +28,7 @@ public class DBHelper {
                     sb.append(line).append(" ");
                 }
             }
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
