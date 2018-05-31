@@ -1,12 +1,14 @@
 package com.hedeen.john.app01.web;
 
+import com.hedeen.john.app01.dao.util.DBHelper;
+
 import javax.servlet.*;
 import java.io.IOException;
 
 public class CharacterSetFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-
+        DBHelper.initDB();
     }
 
     @Override

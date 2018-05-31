@@ -1,7 +1,8 @@
 package com.hedeen.john.app01.web.servlet;
 
-import com.hedeen.john.app01.dao.util.DBConnection;
-import com.hedeen.john.app01.dao.util.DBHelper;
+import com.hedeen.john.app01.model.User;
+import com.hedeen.john.app01.service.UserService;
+import com.hedeen.john.app01.service.UserServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -9,33 +10,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Arrays;
+import java.util.List;
 
 public class MainServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
-        DBHelper.initDB();
-        Connection con = DBConnection.getConnection();
-        Statement st = null;
-        ResultSet rs = null;
-        String result = "";
+
+        UserService userService = UserServiceImpl.getUserService();
+        List<User> users = userService.getUsers();
+
         PrintWriter pw = resp.getWriter();
-        try {
-            st = con.createStatement();
-            rs = st.executeQuery("SELECT users.*, user_roles.role FROM users, user_roles WHERE users.u_id=user_roles.user_id");
-            result = DBHelper.getResultSet(rs);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            pw.write(Arrays.toString(e.getStackTrace()));
-        } finally {
-            DBConnection.close(con, st, rs);
-        }
-        pw.write(result);
+        pw.write(users.get(0).toString());
     }
 }

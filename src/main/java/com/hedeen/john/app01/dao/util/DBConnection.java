@@ -9,10 +9,10 @@ public class DBConnection {
 
     private DBConnection() {}
 
-    public static Connection getConnection() {
-        if(connection == null) {
+    public static Connection getConnection() throws SQLException {
+        if(connection == null || connection.isClosed()) {
             synchronized (DBConnection.class) {
-                if(connection == null) {
+                if(connection == null || connection.isClosed()) {
                     try {
                         ResourceBundle appRB = ResourceBundle.getBundle("application");
                         ResourceBundle dbRB = ResourceBundle.getBundle(appRB.getString("app.db"));
