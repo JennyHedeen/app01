@@ -64,12 +64,15 @@
             <artifactId>log4j-core</artifactId>
             <version>${log4j.version}</version>
         </dependency>
+        <!--Web Servlet Support-->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-web</artifactId>
             <version>${log4j.version}</version>
             <scope>runtime</scope>
         </dependency>
+        <!--Tag Library-->
+        <!--The Log4j Log Tag Library creates the capability of inserting log statements in JSPs without the use of Java scripting. It uses the standard Log4j 2 API to log messages according to your Log4j configuration.-->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-taglib</artifactId>

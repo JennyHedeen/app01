@@ -1,10 +1,13 @@
 package com.hedeen.john.app01.dao.util;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.sql.*;
 import java.util.ResourceBundle;
 
 public class DBConnection {
-
+    private static final Logger dLogger = LogManager.getLogger(DBConnection.class);
     private static Connection connection;
 
     private DBConnection() {}
@@ -21,8 +24,9 @@ public class DBConnection {
                                 dbRB.getString("database.url"),
                                 dbRB.getString("database.user"),
                                 dbRB.getString("database.password"));
+                        if(dLogger.isDebugEnabled()) dLogger.debug("new connection created");
                     } catch (SQLException | ClassNotFoundException e) {
-                        e.printStackTrace();
+                        dLogger.error(e);
                     }
                 }
             }
@@ -33,10 +37,13 @@ public class DBConnection {
     public static void close(Connection connection, Statement st, ResultSet rs) {
         try {
             if(rs!=null) rs.close();
+            if(dLogger.isDebugEnabled()) dLogger.debug("resultSet closed");
             if(st!=null) st.close();
+            if(dLogger.isDebugEnabled()) dLogger.debug("statement closed");
             if(connection!=null) connection.close();
+            if(dLogger.isDebugEnabled()) dLogger.debug("connection closed");
         } catch (SQLException e) {
-//            logger.error(e.getMessage());
+            dLogger.error(e);
         }
     }
 }

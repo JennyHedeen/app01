@@ -1,21 +1,27 @@
 package com.hedeen.john.app01.dao.util;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.sql.*;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
 public class DBHelper {
+    private static final Logger dLogger = LogManager.getLogger(DBHelper.class);
 
     public static void initDB() {
+        if(dLogger.isDebugEnabled()) dLogger.debug("Initializing database");
         try {
             Statement st = DBConnection.getConnection().createStatement();
             ResourceBundle appRB = ResourceBundle.getBundle("application");
             Scanner sc = new Scanner(DBHelper.class.getResourceAsStream(appRB.getString("app.initdb")));
+            if(dLogger.isDebugEnabled()) dLogger.debug("Reading file");
             StringBuilder sb = new StringBuilder();
 
             while(true) {
                 if(!sc.hasNextLine()) {
-                    return;
+                    break;
                 }
                 String line = sc.nextLine();
                 if(line.trim().endsWith(";")) {
@@ -23,13 +29,15 @@ public class DBHelper {
                     line = line.substring(0, line.length() - 1);
                     sb.append(line);
                     st.execute(sb.toString());
+                    if(dLogger.isDebugEnabled()) dLogger.debug("Execute statement: " + sb.toString());
                     sb = new StringBuilder();
                 } else {
-                    sb.append(line).append(" ");
+                    sb.append(line.trim()).append(" ");
                 }
             }
+            if(dLogger.isDebugEnabled()) dLogger.debug("Database initialized");
         } catch (SQLException e) {
-            e.printStackTrace();
+            dLogger.error(e);
         }
     }
 

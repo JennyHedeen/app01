@@ -4,13 +4,13 @@
          version="4.0">
 
     <servlet>
-        <servlet-name>main</servlet-name>
-        <servlet-class>com.hedeen.john.app01.web.servlet.MainServlet</servlet-class>
+        <servlet-name>users</servlet-name>
+        <servlet-class>com.hedeen.john.app01.web.servlet.UserServlet</servlet-class>
         <load-on-startup>0</load-on-startup>
     </servlet>
     <servlet-mapping>
-        <servlet-name>main</servlet-name>
-        <url-pattern>/main</url-pattern>
+        <servlet-name>users</servlet-name>
+        <url-pattern>/users</url-pattern>
     </servlet-mapping>
 
     <filter>

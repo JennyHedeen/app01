@@ -2,6 +2,8 @@ package com.hedeen.john.app01.dao;
 
 import com.hedeen.john.app01.dao.util.DBConnection;
 import com.hedeen.john.app01.model.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -11,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoImpl implements UserDao {
+    private static final Logger logger = LogManager.getLogger(UserDaoImpl.class);
 
     private static UserDao userDao = null;
 
@@ -24,6 +27,7 @@ public class UserDaoImpl implements UserDao {
                 }
             }
         }
+        if(logger.isDebugEnabled()) logger.debug("userDao received");
         return userDao;
     }
 
@@ -38,10 +42,12 @@ public class UserDaoImpl implements UserDao {
             st = con.createStatement();
             rs = st.executeQuery("SELECT users.*, user_roles.role FROM users, user_roles WHERE users.u_id=user_roles.user_id");
             while(rs.next()) {
-                users.add(new User(rs.getInt("users.u_id"), rs.getString("users.name"), rs.getString("users.email"), rs.getString("users.password")));
+                User u = new User(rs.getInt("users.u_id"), rs.getString("users.name"), rs.getString("users.email"), rs.getString("users.password"));
+                users.add(u);
+                logger.info("User created: " + u.toString());
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(e);
         } finally {
             DBConnection.close(con, st, rs);
         }
