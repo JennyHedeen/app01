@@ -4,46 +4,34 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
-import java.util.ResourceBundle;
 
 public class DBConnection {
     private static final Logger dLogger = LogManager.getLogger(DBConnection.class);
-    private static Connection connection;
+    private Connection connection;
 
-    private DBConnection() {}
-
-    public static Connection getConnection() throws SQLException {
-        if(connection == null || connection.isClosed()) {
-            synchronized (DBConnection.class) {
-                if(connection == null || connection.isClosed()) {
-                    try {
-                        ResourceBundle appRB = ResourceBundle.getBundle("application");
-                        ResourceBundle dbRB = ResourceBundle.getBundle(appRB.getString("app.db"));
-                        Class.forName(dbRB.getString("database.driver"));
-                        connection = DriverManager.getConnection(
-                                dbRB.getString("database.url"),
-                                dbRB.getString("database.user"),
-                                dbRB.getString("database.password"));
-                        if(dLogger.isDebugEnabled()) dLogger.debug("new connection created");
-                    } catch (SQLException | ClassNotFoundException e) {
-                        dLogger.error(e);
-                    }
-                }
-            }
-        }
-        return connection;
+    DBConnection(String driver, String url, String username, String password) throws SQLException, ClassNotFoundException {
+        Class.forName(driver);
+        connection = DriverManager.getConnection(url, username, password);
     }
 
-    public static void close(Connection connection, Statement st, ResultSet rs) {
+    public void close(Statement st, ResultSet rs) {
         try {
-            if(rs!=null) rs.close();
-            if(dLogger.isDebugEnabled()) dLogger.debug("resultSet closed");
-            if(st!=null) st.close();
-            if(dLogger.isDebugEnabled()) dLogger.debug("statement closed");
-            if(connection!=null) connection.close();
-            if(dLogger.isDebugEnabled()) dLogger.debug("connection closed");
+            if(rs!=null) {
+                rs.close();
+                if(dLogger.isDebugEnabled()) dLogger.debug("ResultSet closed");
+            }
+            if(st!=null) {
+                st.close();
+                if(dLogger.isDebugEnabled()) dLogger.debug("Statement closed");
+            }
+            ConnectionPool.getPool().close(this);
+            if(dLogger.isDebugEnabled()) dLogger.debug("Connection closed");
         } catch (SQLException e) {
             dLogger.error(e);
         }
+    }
+
+    public Statement createStatement() throws SQLException {
+        return connection.createStatement();
     }
 }

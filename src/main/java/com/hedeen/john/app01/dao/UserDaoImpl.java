@@ -1,11 +1,11 @@
 package com.hedeen.john.app01.dao;
 
+import com.hedeen.john.app01.dao.util.ConnectionPool;
 import com.hedeen.john.app01.dao.util.DBConnection;
 import com.hedeen.john.app01.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -34,11 +34,11 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> getUsers() {
         List<User> users = new ArrayList<>();
-        Connection con = null;
+        DBConnection con = null;
         Statement st = null;
         ResultSet rs = null;
         try {
-            con = DBConnection.getConnection();
+            con = ConnectionPool.getPool().getConnection();
             st = con.createStatement();
             rs = st.executeQuery("SELECT users.*, user_roles.role FROM users, user_roles WHERE users.u_id=user_roles.user_id");
             while(rs.next()) {
@@ -49,7 +49,8 @@ public class UserDaoImpl implements UserDao {
         } catch (SQLException e) {
             logger.error(e);
         } finally {
-            DBConnection.close(con, st, rs);
+            if (con != null)
+                con.close(st, rs);
         }
         return users;
     }

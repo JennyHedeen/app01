@@ -13,7 +13,7 @@ public class DBHelper {
     public static void initDB() {
         if(dLogger.isDebugEnabled()) dLogger.debug("Initializing database");
         try {
-            Statement st = DBConnection.getConnection().createStatement();
+            Statement st = ConnectionPool.getPool().getConnection().createStatement();
             ResourceBundle appRB = ResourceBundle.getBundle("application");
             Scanner sc = new Scanner(DBHelper.class.getResourceAsStream(appRB.getString("app.initdb")));
             if(dLogger.isDebugEnabled()) dLogger.debug("Reading file");
