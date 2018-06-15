@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 import java.sql.*;
 
 public class DBConnection {
-    private static final Logger dLogger = LogManager.getLogger(DBConnection.class);
+    private static final Logger logger = LogManager.getLogger(DBConnection.class);
     private Connection connection;
 
     DBConnection(String driver, String url, String username, String password) throws SQLException, ClassNotFoundException {
@@ -18,20 +18,53 @@ public class DBConnection {
         try {
             if(rs!=null) {
                 rs.close();
-                if(dLogger.isDebugEnabled()) dLogger.debug("ResultSet closed");
+                if(logger.isDebugEnabled()) logger.debug("ResultSet closed");
             }
             if(st!=null) {
                 st.close();
-                if(dLogger.isDebugEnabled()) dLogger.debug("Statement closed");
+                if(logger.isDebugEnabled()) logger.debug("Statement closed");
             }
             ConnectionPool.getPool().close(this);
-            if(dLogger.isDebugEnabled()) dLogger.debug("Connection closed");
+            if(logger.isDebugEnabled()) logger.debug("Connection closed");
         } catch (SQLException e) {
-            dLogger.error(e);
+            logger.error(e);
         }
     }
 
     public Statement createStatement() throws SQLException {
         return connection.createStatement();
+    }
+
+    public PreparedStatement prepareStatement(String query, Object... values) throws SQLException {
+        PreparedStatement pst = connection.prepareStatement(query);
+        setValues(pst, values);
+        return pst;
+    }
+
+    public PreparedStatement prepareInsertStatement(String query, Object... values) throws SQLException {
+        PreparedStatement pst = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+        setValues(pst, values);
+        return pst;
+    }
+
+    private void setValues(PreparedStatement pst, Object[] values) throws SQLException {
+        if(values == null) {
+            return;
+        }
+
+        for (int i = 0; i < values.length; i++) {
+            if (values[i] instanceof Date) {
+                pst.setDate(i+1, (Date) values[i]);
+            }
+            else if (values[i] instanceof Integer) {
+                pst.setInt(i+1, (Integer) values[i]);
+            }
+            else if (values[i] instanceof String) {
+                pst.setString(i+1, (String) values[i]);
+            } else {
+                logger.warn("unexpected object type");
+                // TODO: throw new exception
+            }
+        }
     }
 }
