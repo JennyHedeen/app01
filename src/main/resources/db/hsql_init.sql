@@ -1,33 +1,27 @@
 DROP TABLE IF EXISTS feedback;
 DROP TABLE IF EXISTS appointments;
 DROP TABLE IF EXISTS seances;
-DROP TABLE IF EXISTS user_roles;
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE users
 (
-    u_id INTEGER IDENTITY PRIMARY KEY,
-    name VARCHAR (255) NOT NULL,
-    email VARCHAR (255) UNIQUE  NOT NULL,
-    password VARCHAR (255) NOT NULL
+    u_id        INTEGER IDENTITY PRIMARY KEY,
+    name        VARCHAR (255) NOT NULL,
+    email       VARCHAR (255) UNIQUE  NOT NULL,
+    password    VARCHAR (255) NOT NULL,
+    role        VARCHAR(6) CHECK (role IN ('CLIENT', 'MASTER', 'ADMIN'))
 );
-CREATE TABLE user_roles
-(
-    user_id   INTEGER NOT NULL,
-    role      VARCHAR (255),
-    CONSTRAINT user_role_idx UNIQUE (user_id, role),
-    FOREIGN KEY (user_id) REFERENCES users (u_id) ON DELETE CASCADE
-);
+
 CREATE TABLE seances
 (
-    s_id          INTEGER IDENTITY PRIMARY KEY,
+    s_id        INTEGER IDENTITY PRIMARY KEY,
     start_time  TIME NOT NULL,
     end_time    TIME NOT NULL
 );
 
 CREATE TABLE appointments
 (
-    a_id          INTEGER IDENTITY PRIMARY KEY,
+    a_id        INTEGER IDENTITY PRIMARY KEY,
     master_id   INTEGER,
     client_id   INTEGER,
     date        DATE    NOT NULL,
@@ -47,22 +41,12 @@ CREATE TABLE feedback
     FOREIGN KEY (app_id) REFERENCES appointments (a_id) ON DELETE CASCADE
 );
 
-INSERT INTO users (name, email, password) VALUES
-    ('Ромашова Ольга', 'ro@gmail.com', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918'),
-    ('Тищенко Екатерина', 'te@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'),
-    ('Потапова Алеся', 'pa@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'),
-    ('Смирнова Ольга', 'so@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'),
-    ('Буланов Тимур', 'bt@gmail.com', 'fc613b4dfd6736a7bd268c8a0e74ed0d1c04a959f59dd74ef2874983fd443fc9');
-
-INSERT INTO user_roles (role, user_id) VALUES
-    ('MASTER', 0),
-    ('CLIENT', 1),
-    ('CLIENT', 2),
-    ('CLIENT', 3),
-    ('CLIENT', 0),
-    ('ADMIN', 0),
-    ('CLIENT', 4),
-    ('MASTER', 4);
+INSERT INTO users (name, email, password, role) VALUES
+    ('Ромашова Ольга', 'ro@gmail.com', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'ADMIN'),
+    ('Тищенко Екатерина', 'te@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'MASTER'),
+    ('Потапова Алеся', 'pa@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'CLIENT'),
+    ('Смирнова Ольга', 'so@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'CLIENT'),
+    ('Буланов Тимур', 'bt@gmail.com', 'fc613b4dfd6736a7bd268c8a0e74ed0d1c04a959f59dd74ef2874983fd443fc9', 'CLIENT');
 
 INSERT INTO seances (start_time, end_time) VALUES
     ('8:00:00', '8:55:00'),

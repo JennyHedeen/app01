@@ -5,16 +5,18 @@ public class User {
     private String name;
     private String email;
     private String password;
+    private Roles role;
 
-    public User(Integer id, String name, String email, String password) {
+    public User(Integer id, String name, String email, String password, Roles role) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
+        this.role = role;
     }
 
-    public User(String name, String email, String password) {
-        this(null, name, email, password);
+    public User(String name, String email, String password, Roles role) {
+        this(null, name, email, password, role);
     }
 
     public Integer getId() {
@@ -35,6 +37,14 @@ public class User {
 
     public String getPassword() {
         return password;
+    }
+
+    public Roles getRole() {
+        return role;
+    }
+
+    public void setRole(Roles role) {
+        this.role = role;
     }
 
     @Override
@@ -59,5 +69,11 @@ public class User {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+    public enum Roles {
+        CLIENT,
+        MASTER,
+        ADMIN
     }
 }

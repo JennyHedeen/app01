@@ -2,6 +2,7 @@
 <Configuration status="Warn">
     <Properties>
         <Property name="path">${log4j:configParentLocation}/../../log/</Property>
+        <!--<Property name="path">/home/john/cinlog/</Property>-->
     </Properties>
 
     <Appenders>
@@ -13,7 +14,7 @@
                      filePattern="${path}app-%d{MM-dd-yy-HH-mm-ss}-%i.log.gz">
             <PatternLayout pattern="%date{DEFAULT} %-5level [%t] %F:%L - %msg%n"/>
             <Policies>
-                <SizeBasedTriggeringPolicy size="512 kB"/>
+                <SizeBasedTriggeringPolicy size="2048 kB"/>
             </Policies>
             <DefaultRolloverStrategy max="5" />
             <Filters>

@@ -40,9 +40,13 @@ public class UserDaoImpl implements UserDao {
         try {
             con = ConnectionPool.getPool().getConnection();
             st = con.createStatement();
-            rs = st.executeQuery("SELECT users.*, user_roles.role FROM users, user_roles WHERE users.u_id=user_roles.user_id");
+            rs = st.executeQuery("SELECT * FROM users");
             while(rs.next()) {
-                User u = new User(rs.getInt("users.u_id"), rs.getString("users.name"), rs.getString("users.email"), rs.getString("users.password"));
+                User u = new User(rs.getInt("users.u_id"),
+                                rs.getString("users.name"),
+                                rs.getString("users.email"),
+                                rs.getString("users.password"),
+                                User.Roles.valueOf(rs.getString("users.role")));
                 users.add(u);
                 logger.info("User created: " + u.toString());
             }

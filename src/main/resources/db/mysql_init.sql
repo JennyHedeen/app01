@@ -1,7 +1,6 @@
 DROP TABLE IF EXISTS feedback;
 DROP TABLE IF EXISTS appointments;
 DROP TABLE IF EXISTS seances;
-DROP TABLE IF EXISTS user_roles;
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE users
@@ -9,15 +8,8 @@ CREATE TABLE users
   u_id      INTEGER AUTO_INCREMENT PRIMARY KEY,
   name      VARCHAR (255) NOT NULL,
   email     VARCHAR (255) UNIQUE  NOT NULL ,
-  password  VARCHAR (255) NOT NULL
-);
-
-CREATE TABLE user_roles
-(
-  user_id   INTEGER NOT NULL,
-  role      VARCHAR (255),
-  CONSTRAINT user_role_idx UNIQUE (user_id, role),
-  FOREIGN KEY (user_id) REFERENCES users (u_id) ON DELETE CASCADE
+  password  VARCHAR (255) NOT NULL,
+  role      ENUM('CLIENT', 'MASTER', 'ADMIN')
 );
 
 CREATE TABLE seances
@@ -49,22 +41,12 @@ CREATE TABLE feedback
   FOREIGN KEY (app_id) REFERENCES appointments (a_id) ON DELETE CASCADE
 );
 
-INSERT INTO users (name, email, password) VALUES
-  ('Ромашова Ольга', 'ro@gmail.com', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918'),
-  ('Тищенко Екатерина', 'te@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'),
-  ('Потапова Алеся', 'pa@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'),
-  ('Смирнова Ольга', 'so@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'),
-  ('Буланов Тимур', 'bt@gmail.com', 'fc613b4dfd6736a7bd268c8a0e74ed0d1c04a959f59dd74ef2874983fd443fc9');
-
-INSERT INTO user_roles (role, user_id) VALUES
-  ('MASTER', 1),
-  ('CLIENT', 2),
-  ('CLIENT', 3),
-  ('CLIENT', 4),
-  ('CLIENT', 1),
-  ('ADMIN', 1),
-  ('CLIENT', 5),
-  ('MASTER', 5);
+INSERT INTO users (name, email, password, role) VALUES
+  ('Ромашова Ольга', 'ro@gmail.com', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'ADMIN'),
+  ('Тищенко Екатерина', 'te@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'MASTER'),
+  ('Потапова Алеся', 'pa@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'CLIENT'),
+  ('Смирнова Ольга', 'so@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'CLIENT'),
+  ('Буланов Тимур', 'bt@gmail.com', 'fc613b4dfd6736a7bd268c8a0e74ed0d1c04a959f59dd74ef2874983fd443fc9', 'CLIENT');
 
 INSERT INTO seances (start_time, end_time) VALUES
   ('8:00:00', '8:55:00'),
