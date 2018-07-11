@@ -21,7 +21,7 @@ public class UserServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
 
-        UserService userService = UserServiceImpl.getUserService();
+        UserService userService = UserServiceImpl.getUserService(null);
         List<User> users = userService.getUsers();
 
         PrintWriter pw = resp.getWriter();

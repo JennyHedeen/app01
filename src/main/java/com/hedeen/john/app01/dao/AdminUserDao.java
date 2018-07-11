@@ -12,22 +12,22 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDaoImpl implements UserDao {
-    private static final Logger logger = LogManager.getLogger(UserDaoImpl.class);
+public class AdminUserDao implements UserDao {
+    private static final Logger logger = LogManager.getLogger(AdminUserDao.class);
 
     private static UserDao userDao = null;
 
-    private UserDaoImpl() {}
+    private AdminUserDao() {}
 
     public static UserDao getUserDao() {
         if(userDao==null) {
-            synchronized (UserDaoImpl.class) {
+            synchronized (AdminUserDao.class) {
                 if(userDao==null) {
-                    userDao = new UserDaoImpl();
+                    userDao = new AdminUserDao();
                 }
             }
         }
-        if(logger.isDebugEnabled()) logger.debug("userDao received");
+        if(logger.isDebugEnabled()) logger.debug("Admin userDao received");
         return userDao;
     }
 
@@ -43,12 +43,12 @@ public class UserDaoImpl implements UserDao {
             rs = st.executeQuery("SELECT * FROM users");
             while(rs.next()) {
                 User u = new User(rs.getInt("users.u_id"),
-                                rs.getString("users.name"),
-                                rs.getString("users.email"),
-                                rs.getString("users.password"),
-                                User.Roles.valueOf(rs.getString("users.role")));
+                        rs.getString("users.name"),
+                        rs.getString("users.email"),
+                        rs.getString("users.password"),
+                        User.Role.valueOf(rs.getString("users.role")));
                 users.add(u);
-                logger.info("User created: " + u.toString());
+                logger.info("User obtained: " + u.toString());
             }
         } catch (SQLException e) {
             logger.error(e);

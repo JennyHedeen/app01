@@ -1,7 +1,7 @@
 package com.hedeen.john.app01.service;
 
 import com.hedeen.john.app01.dao.UserDao;
-import com.hedeen.john.app01.dao.UserDaoImpl;
+import com.hedeen.john.app01.dao.UserDaoFactory;
 import com.hedeen.john.app01.model.User;
 
 import java.util.List;
@@ -11,15 +11,15 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
     private static UserService userService = null;
 
-    public UserServiceImpl() {
-        userDao = UserDaoImpl.getUserDao();
+    private UserServiceImpl(User.Role role) {
+        userDao = UserDaoFactory.getUserDao(role);
     }
 
-    public static UserService getUserService() {
+    public static UserService getUserService(User.Role role) {
         if(userService==null) {
             synchronized (UserServiceImpl.class) {
                 if(userService==null) {
-                    userService = new UserServiceImpl();
+                    userService = new UserServiceImpl(role);
                 }
             }
         }
