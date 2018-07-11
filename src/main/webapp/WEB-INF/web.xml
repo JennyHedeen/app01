@@ -3,6 +3,8 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
 
+    <display-name>Cinderella2</display-name>
+
     <servlet>
         <servlet-name>users</servlet-name>
         <servlet-class>com.hedeen.john.app01.web.servlet.UserServlet</servlet-class>

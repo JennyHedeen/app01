@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 
 public class UserServlet extends HttpServlet {
@@ -21,10 +20,10 @@ public class UserServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
 
-        UserService userService = UserServiceImpl.getUserService(null);
+        UserService userService = UserServiceImpl.getUserService(User.Role.ADMIN);
         List<User> users = userService.getUsers();
 
-        PrintWriter pw = resp.getWriter();
-        pw.write(users.get(0).toString());
+        req.setAttribute("users", users);
+        req.getRequestDispatcher("jsp/users.jsp").forward(req, resp);
     }
 }
