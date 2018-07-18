@@ -5,44 +5,48 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 
-public class DBConnection {
+public class DBConnection implements AutoCloseable {
     private static final Logger logger = LogManager.getLogger(DBConnection.class);
     private Connection connection;
+    private Statement st;
+    private PreparedStatement pst;
 
     DBConnection(String driver, String url, String username, String password) throws SQLException, ClassNotFoundException {
         Class.forName(driver);
         connection = DriverManager.getConnection(url, username, password);
     }
 
-    public void close(Statement st, ResultSet rs) {
+    @Override
+    public void close() {
         try {
-            if(rs!=null) {
-                rs.close();
-                if(logger.isDebugEnabled()) logger.debug("ResultSet closed");
-            }
             if(st!=null) {
                 st.close();
                 if(logger.isDebugEnabled()) logger.debug("Statement closed");
             }
+            if(pst!=null) {
+                pst.close();
+                if(logger.isDebugEnabled()) logger.debug("PreparedStatement closed");
+            }
             ConnectionPool.getPool().close(this);
-            if(logger.isDebugEnabled()) logger.debug("Connection closed");
+            if(logger.isDebugEnabled()) logger.debug("DBConnection closed");
         } catch (SQLException e) {
             logger.error(e);
         }
     }
 
     public Statement createStatement() throws SQLException {
-        return connection.createStatement();
+        st = connection.createStatement();
+        return st;
     }
 
     public PreparedStatement prepareStatement(String query, Object... values) throws SQLException {
-        PreparedStatement pst = connection.prepareStatement(query);
+        pst = connection.prepareStatement(query);
         setValues(pst, values);
         return pst;
     }
 
     public PreparedStatement prepareInsertStatement(String query, Object... values) throws SQLException {
-        PreparedStatement pst = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+        pst = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         setValues(pst, values);
         return pst;
     }
