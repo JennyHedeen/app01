@@ -7,7 +7,7 @@
 
     <servlet>
         <servlet-name>users</servlet-name>
-        <servlet-class>com.hedeen.john.app01.web.servlet.UserServlet</servlet-class>
+        <servlet-class>com.hedeen.john.app01.web.servlet.AdminServlet</servlet-class>
         <load-on-startup>0</load-on-startup>
     </servlet>
     <servlet-mapping>

@@ -30,4 +30,30 @@ public class ClientUserDao implements UserDao {
     public List<User> getUsers() {
         return Collections.emptyList();
     }
+
+    @Override
+    public User save(User user) {
+        return null;
+    }
+
+    @Override
+    public boolean delete(int id) {
+        //TODO
+        return false;
+    }
+
+    @Override
+    public User getByEmail(String email) {
+        return null;
+    }
+
+    @Override
+    public User getById(int id) {
+        return null;
+    }
+
+    @Override
+    public List<User> getAllMasters() {
+        return null;
+    }
 }

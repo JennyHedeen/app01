@@ -7,6 +7,9 @@ public class User {
     private String password;
     private Role role;
 
+    public User() {
+    }
+
     public User(Integer id, String name, String email, String password, Role role) {
         this.id = id;
         this.name = name;
@@ -45,6 +48,10 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public boolean isNew() {
+        return this.id == null;
     }
 
     @Override
