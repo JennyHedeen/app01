@@ -4,7 +4,7 @@
 <fmt:setLocale value="${sessionScope.language!=null ? sessionScope.language : pageContext.request.locale}"/>
 <fmt:setBundle basename="messages.app"/>
 <html>
-<jsp:include page="../fragments/headTag.jsp"/>
+<jsp:include page="fragments/headTag.jsp"/>
 <body>
     <c:if test="${param.action == 'edit'}">
         <h2><fmt:message key="user.editdata"/></h2>
@@ -40,9 +40,21 @@
             </c:if>
 
             <c:if test="${param.action == 'edit'}">
-            <div><label>ROLE:</label></div>
-            <div><input type="text" value="${user.role}" name="role" required></div>
+                <div><label>ROLE:</label></div>
+                <select name="role">
+                    <option value="${user.role}" selected>${user.role}</option>
+                    <c:if test="${user.role != 'MASTER'}">
+                        <option value="MASTER">MASTER</option>
+                    </c:if>
+                    <c:if test="${user.role != 'CLIENT'}">
+                        <option value="CLIENT">CLIENT</option>
+                    </c:if>
+                    <c:if test="${user.role != 'ADMIN'}">
+                        <option value="ADMIN">ADMIN</option>
+                    </c:if>
+                </select>
             </c:if>
+            </br>
             <button type="submit"><fmt:message key="user.save"/></button>
             <button onclick="window.history.back()" type="button"><fmt:message key="user.cancel"/></button>
         </form>

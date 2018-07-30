@@ -61,7 +61,7 @@ public class AdminServlet extends HttpServlet {
         String regName = req.getParameter("name");
         String regEmail = req.getParameter("email");
         String regPassword = req.getParameter("password");
-        String regRole = req.getParameter("role");
+        String regRole = req.getParameter("role")!=null?req.getParameter("role"):"CLIENT";
 
         User user = new User(regName, regEmail, regPassword, User.Role.valueOf(regRole));
 

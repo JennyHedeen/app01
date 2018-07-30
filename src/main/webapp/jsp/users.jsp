@@ -4,9 +4,9 @@
 <fmt:setLocale value="${sessionScope.language!=null ? sessionScope.language : pageContext.request.locale}"/>
 <fmt:setBundle basename="messages.app"/>
 <html>
-<jsp:include page="../fragments/headTag.jsp"/>
+<jsp:include page="fragments/headTag.jsp"/>
 <body>
-<jsp:include page="../fragments/navMenu.jsp"/>
+<jsp:include page="fragments/navMenu.jsp"/>
     <br>
     <div><a href="users?action=create"><fmt:message key="user.add"/></a></div>
 

@@ -19,7 +19,7 @@
         </div>
         <c:if test="${sessionScope.authUser != null}">
         <div><a href="schedule?action=my"><fmt:message key="app.my"/></a></div>
-            <c:if test="${sessionScope.authUser.admin}">
+            <c:if test="${sessionScope.authUser.role == 'ADMIN'}">
                 <div><a href="users"><fmt:message key="app.manage"/></a></div>
             </c:if>
         </c:if>
